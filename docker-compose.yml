@@ -1,0 +1,30 @@
+services:
+  builder-ui:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - builder-db
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@builder-db:5432/postgres
+      - DOCKER_BUILD_HOST_PATH=${DOCKER_BUILD_HOST_PATH}
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./build_wisblock_zephyr:/app/build_wisblock_zephyr
+
+  builder-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
