@@ -1,8 +1,9 @@
-import { spawn } from 'child_process';
-import { mkdirSync, chmodSync } from 'fs';
-import { NextRequest, NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 import type { HardwareConfiguration } from '@/types/wisblock';
-import path from 'path';
+import { spawn } from 'node:child_process';
+import { chmodSync, mkdirSync } from 'node:fs';
+import path from 'node:path';
+import { NextResponse } from 'next/server';
 
 function createBuildCommand(config: HardwareConfiguration): { board: string; args: string[] } {
   const board = config.core?.id.replace('core-', '') || 'rak4631';
@@ -19,7 +20,7 @@ function createBuildCommand(config: HardwareConfiguration): { board: string; arg
   }
   // ... add more logic for other slots ...
 
-  args.unshift("-DOVERLAY_CONFIG='overlay-bt_mcumgr.conf overlay-lorawan.conf'");
+  args.unshift('-DOVERLAY_CONFIG=\'overlay-bt_mcumgr.conf overlay-lorawan.conf\'');
 
   return { board, args };
 }
@@ -46,7 +47,7 @@ export async function POST(req: NextRequest) {
       'run',
       '--rm',
       '-v',
-      //`${absoluteBuildDir}:/workdir`, // Mount absolute path
+      // `${absoluteBuildDir}:/workdir`, // Mount absolute path
       `${hostBuildPath}:/workdir`,
       'ghcr.io/zephyrproject-rtos/zephyr-build:main',
       '/bin/bash',
@@ -73,7 +74,7 @@ export async function POST(req: NextRequest) {
         echo "--- [4/4] Start build FW (Board: ${board}) ---"
         echo "Build args: ${buildArgsString}"
 
-	cd wisblock-zephyr-sdk
+        cd wisblock-zephyr-sdk
 
         west build -p -b ${board} rakwireless/thingset_lorawan/ -- ${buildArgsString}
 
@@ -124,8 +125,8 @@ export async function POST(req: NextRequest) {
       headers: { 'Content-Type': 'text/plain; charset=utf-8' },
     });
   } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : 'An unknown error occurred';
+    const errorMessage
+      = error instanceof Error ? error.message : 'An unknown error occurred';
     return new NextResponse(JSON.stringify({ error: errorMessage }), {
       status: 500,
     });

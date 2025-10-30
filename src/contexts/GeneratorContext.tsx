@@ -1,24 +1,24 @@
 'use client';
 
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useMemo,
-  useCallback,
-} from 'react';
 import type {
+  BuildStatus,
   HardwareConfiguration,
+  LogEntry,
   WisBlockModule,
   WisBlockSlot,
-  BuildStatus,
-  LogEntry,
 } from '@/types/wisblock';
+import React, {
+  createContext,
+  use,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react';
 import { wisblockModules } from '@/data/wisblockModules';
 
 const getTimestamp = () => new Date().toLocaleTimeString();
 
-interface GeneratorContextType {
+type GeneratorContextType = {
   config: HardwareConfiguration;
   buildStatus: BuildStatus;
   logs: LogEntry[];
@@ -28,7 +28,7 @@ interface GeneratorContextType {
   startBuild: () => void;
   clearLogs: () => void;
   toggleConsole: (forceState?: boolean) => void;
-}
+};
 
 const GeneratorContext = createContext<GeneratorContextType | undefined>(
   undefined,
@@ -36,10 +36,10 @@ const GeneratorContext = createContext<GeneratorContextType | undefined>(
 
 export function GeneratorProvider({ children }: { children: React.ReactNode }) {
   const [config, setConfig] = useState<HardwareConfiguration>({
-    base: wisblockModules.find((m) => m.id === 'base-rak19007') || null, // Default base
-    core: wisblockModules.find((m) => m.id === 'core-rak4631') || null, // Default core
+    base: wisblockModules.find(m => m.id === 'base-rak19007') || null, // Default base
+    core: wisblockModules.find(m => m.id === 'core-rak4631') || null, // Default core
     slots: {
-      A: wisblockModules.find((m) => m.id === 'sensor-rak1901') || null, // Default sensor
+      A: wisblockModules.find(m => m.id === 'sensor-rak1901') || null, // Default sensor
       B: null,
       IO: null,
     },
@@ -54,7 +54,9 @@ export function GeneratorProvider({ children }: { children: React.ReactNode }) {
         if (module.type === 'base') {
           const newSlots: HardwareConfiguration['slots'] = {};
           module.slots.forEach((s) => {
-            if (s !== 'Core') newSlots[s] = null;
+            if (s !== 'Core') {
+              newSlots[s] = null;
+            }
           });
 
           return {
@@ -73,10 +75,9 @@ export function GeneratorProvider({ children }: { children: React.ReactNode }) {
         }
 
         if (
-          (module.type === 'sensor' || module.type === 'io') &&
-          slot !== 'Core'
+          (module.type === 'sensor' || module.type === 'io')
+          && slot !== 'Core'
         ) {
-
           return {
             ...prevConfig,
             slots: {
@@ -96,7 +97,6 @@ export function GeneratorProvider({ children }: { children: React.ReactNode }) {
   const removeModule = useCallback((slot: WisBlockSlot) => {
     setConfig((prevConfig) => {
       if (slot === 'Core') {
-
         return {
           ...prevConfig,
           core: null,
@@ -124,7 +124,7 @@ export function GeneratorProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const toggleConsole = useCallback((forceState?: boolean) => {
-    setIsConsoleExpanded(forceState ?? ((prev) => !prev));
+    setIsConsoleExpanded(forceState ?? (prev => !prev));
   }, []);
 
   const startBuild = useCallback(async () => {
@@ -138,9 +138,9 @@ export function GeneratorProvider({ children }: { children: React.ReactNode }) {
       let logType: LogEntry['type'] = defaultType;
       const lowerMessage = message.toLowerCase();
       if (
-        lowerMessage.includes('error') ||
-        lowerMessage.includes('failed') ||
-        lowerMessage.includes('err:')
+        lowerMessage.includes('error')
+        || lowerMessage.includes('failed')
+        || lowerMessage.includes('err:')
       ) {
         logType = 'error';
       } else if (lowerMessage.startsWith('--- [') || lowerMessage.startsWith('west ')) {
@@ -149,7 +149,7 @@ export function GeneratorProvider({ children }: { children: React.ReactNode }) {
         logType = 'success';
       }
 
-      setLogs((prevLogs) => [
+      setLogs(prevLogs => [
         ...prevLogs,
         {
           id: logId++,
@@ -178,7 +178,9 @@ export function GeneratorProvider({ children }: { children: React.ReactNode }) {
       while (true) {
         const { done, value } = await reader.read();
         if (done) {
-          if (partialLine) addLog(partialLine);
+          if (partialLine) {
+            addLog(partialLine);
+          }
           break;
         }
 
@@ -187,7 +189,9 @@ export function GeneratorProvider({ children }: { children: React.ReactNode }) {
         partialLine = lines.pop() || '';
 
         for (const line of lines) {
-          if (line) addLog(line);
+          if (line) {
+            addLog(line);
+          }
         }
       }
 
@@ -203,8 +207,8 @@ export function GeneratorProvider({ children }: { children: React.ReactNode }) {
         return prevLogs;
       });
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : String(error);
+      const errorMessage
+        = error instanceof Error ? error.message : String(error);
       addLog(`Frontend Error: ${errorMessage}`, 'error');
       setBuildStatus('failed');
     }
@@ -236,14 +240,14 @@ export function GeneratorProvider({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <GeneratorContext.Provider value={value}>
+    <GeneratorContext value={value}>
       {children}
-    </GeneratorContext.Provider>
+    </GeneratorContext>
   );
 }
 
 export const useGenerator = () => {
-  const context = useContext(GeneratorContext);
+  const context = use(GeneratorContext);
   if (context === undefined) {
     throw new Error('useGenerator must be used within a GeneratorProvider');
   }

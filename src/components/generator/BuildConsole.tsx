@@ -1,22 +1,23 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { useGenerator } from '@/contexts/GeneratorContext';
-import { Button } from '@/components/ui/button';
+import type { KeyboardEvent } from 'react';
+import type { LogEntry } from '@/types/wisblock';
 import {
-  ChevronDown,
-  ChevronUp,
-  Trash2,
-  Download,
-  Terminal,
   AlertTriangle,
   CheckCircle,
-  Loader2,
+  ChevronDown,
+  ChevronUp,
+  Download,
   FileText,
+  Loader2,
+  Terminal,
+  Trash2,
 } from 'lucide-react';
+import { useEffect, useRef } from 'react';
+import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { useGenerator } from '@/contexts/GeneratorContext';
 import { cn } from '@/libs/utils';
-import type { LogEntry } from '@/types/wisblock';
 
 export default function BuildConsole() {
   const {
@@ -71,6 +72,13 @@ export default function BuildConsole() {
 
   const { icon, text, color } = getStatusInfo();
 
+  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggleConsole();
+    }
+  };
+
   return (
     <div
       className={cn(
@@ -80,14 +88,21 @@ export default function BuildConsole() {
     >
       {/* Console Header */}
       <div
+        role="button"
+        tabIndex={0}
         className="flex h-12 flex-shrink-0 cursor-pointer items-center justify-between border-b px-4"
         onClick={() => toggleConsole()}
+        onKeyDown={handleKeyDown}
       >
         <div className="flex items-center gap-2">
           {icon}
           <span className={cn('font-mono text-sm font-medium', color)}>
             Build Console
-            <span className="hidden sm:inline"> - {text}</span>
+            <span className="hidden sm:inline">
+              {' '}
+              -
+              {text}
+            </span>
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -100,7 +115,7 @@ export default function BuildConsole() {
                   className="h-7 w-7"
                   onClick={(e) => {
                     e.stopPropagation();
-                    alert('Simulating firmware download...');
+                    console.warn('Simulating firmware download...');
                   }}
                   title="Download Firmware"
                 >
@@ -113,7 +128,7 @@ export default function BuildConsole() {
                 className="h-7 w-7"
                 onClick={(e) => {
                   e.stopPropagation();
-                  alert('Simulating log download...');
+                  console.warn('Simulating log download...');
                 }}
                 title="Download Log"
               >
@@ -133,11 +148,13 @@ export default function BuildConsole() {
               </Button>
             </>
           )}
-          {isConsoleExpanded ? (
-            <ChevronDown className="h-5 w-5" />
-          ) : (
-            <ChevronUp className="h-5 w-5" />
-          )}
+          {isConsoleExpanded
+            ? (
+                <ChevronDown className="h-5 w-5" />
+              )
+            : (
+                <ChevronUp className="h-5 w-5" />
+              )}
         </div>
       </div>
 
@@ -148,17 +165,19 @@ export default function BuildConsole() {
         style={{ display: isConsoleExpanded ? 'block' : 'none' }}
       >
         <pre className="p-4 font-mono text-xs">
-          {logs.length === 0 ? (
-            <span className="text-muted-foreground">
-              {buildStatus === 'ready'
-                ? 'Click "Generate Firmware" to start the build process.'
-                : 'Waiting for log output...'}
-            </span>
-          ) : (
-            logs.map((log) => (
-              <LogLine key={log.id} log={log} />
-            ))
-          )}
+          {logs.length === 0
+            ? (
+                <span className="text-muted-foreground">
+                  {buildStatus === 'ready'
+                    ? 'Click "Generate Firmware" to start the build process.'
+                    : 'Waiting for log output...'}
+                </span>
+              )
+            : (
+                logs.map(log => (
+                  <LogLine key={log.id} log={log} />
+                ))
+              )}
         </pre>
       </ScrollArea>
     </div>
