@@ -2,7 +2,7 @@
 
 import type { WisBlockModule, WisBlockSlot } from '@/types/wisblock';
 import { useDroppable } from '@dnd-kit/core';
-import { Package, XCircle } from 'lucide-react';
+import { LayoutGrid, XCircle } from 'lucide-react';
 import { useGenerator } from '@/contexts/GeneratorContext';
 
 export default function VirtualCanvas() {
@@ -118,8 +118,8 @@ function DroppableSlot({
       ${isActive ? 'border-primary bg-primary/10' : 'border-muted-foreground/30 bg-muted/20'}
       transition-colors`}
     >
-      <Package className="h-5 w-5 text-muted-foreground" />
-      <span className="text-sm font-medium text-muted-foreground">
+      <LayoutGrid className="h-6 w-6 text-muted-foreground" />
+      <span className="text-base font-bold text-muted-foreground">
         Slot
         {' '}
         {slotId}
