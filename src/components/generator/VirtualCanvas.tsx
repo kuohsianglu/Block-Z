@@ -37,16 +37,29 @@ export default function VirtualCanvas() {
 
               {/* Module Slots */}
               <div className="grid grid-cols-2 gap-2">
-                {Object.keys(config.slots).map(slotKey => (
+                {(Object.keys(config.slots) as WisBlockSlot[])
+                  .filter(slotKey => slotKey !== 'IO')
+                  .map(slotKey => (
+                    <DroppableSlot
+                      key={slotKey}
+                      slotId={slotKey as WisBlockSlot}
+                      module={config.slots[slotKey]}
+                      compatibleTypes={['sensor']}
+                      onRemove={() => removeModule(slotKey as WisBlockSlot)}
+                    />
+                  ))}
+              </div>
+              {(Object.keys(config.slots) as WisBlockSlot[])
+                .filter(slotKey => slotKey === 'IO')
+                .map(slotKey => (
                   <DroppableSlot
                     key={slotKey}
-                    slotId={slotKey as WisBlockSlot}
+                    slotId={slotKey}
                     module={config.slots[slotKey]}
-                    compatibleTypes={slotKey === 'IO' ? ['io'] : ['sensor']}
-                    onRemove={() => removeModule(slotKey as WisBlockSlot)}
+                    compatibleTypes={['io']}
+                    onRemove={() => removeModule(slotKey)}
                   />
                 ))}
-              </div>
               <p className="mt-2 text-center text-xs text-muted-foreground">
                 Click [x] to remove a module.
               </p>
@@ -76,7 +89,7 @@ function DroppableSlot({
 
   if (module) {
     return (
-      <div className="relative flex min-h-[60px] flex-col justify-center rounded-md border border-primary bg-primary/20 p-2 shadow-inner">
+      <div className="relative flex min-h-[120px] flex-col justify-center rounded-md border border-primary bg-primary/20 p-2 shadow-inner">
         <span className="text-xs font-bold uppercase text-primary/80">
           {slotId}
         </span>
@@ -101,7 +114,7 @@ function DroppableSlot({
   return (
     <div
       ref={setNodeRef}
-      className={`flex min-h-[60px] flex-col items-center justify-center rounded-md border-2 border-dashed
+      className={`flex min-h-[120px] flex-col items-center justify-center rounded-md border-2 border-dashed
       ${isActive ? 'border-primary bg-primary/10' : 'border-muted-foreground/30 bg-muted/20'}
       transition-colors`}
     >
