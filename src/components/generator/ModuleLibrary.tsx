@@ -2,7 +2,7 @@
 
 import type { WisBlockModule, WisBlockSlot } from '@/types/wisblock';
 import { useDraggable } from '@dnd-kit/core';
-import { PlusCircle } from 'lucide-react';
+import { Package, PlusCircle } from 'lucide-react';
 import Image from 'next/image';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -84,6 +84,9 @@ function DraggableModule({ module }: { module: WisBlockModule }) {
     }
   };
 
+  const Icon = module.icon || Package;
+  const iconColor = module.color || 'text-muted-foreground';
+
   return (
     <div
       ref={setNodeRef}
@@ -103,8 +106,13 @@ function DraggableModule({ module }: { module: WisBlockModule }) {
       >
         <PlusCircle className="h-4 w-4" />
       </button>
-      <div className="text-sm font-semibold">{module.name}</div>
-      <div className="text-xs text-muted-foreground">{module.description}</div>
+      <div className="flex-1">
+        <div className="flex items-center gap-1.5">
+          <p className="font-semibold">{module.name}</p>
+          <Icon className={`h-4 w-4 flex-shrink-0 ${iconColor}`} />
+        </div>
+      </div>
+      <p className="text-xs text-muted-foreground">{module.description}</p>
     </div>
   );
 }

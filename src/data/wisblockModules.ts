@@ -1,4 +1,5 @@
 import type { WisBlockModule } from '../types/wisblock';
+import { Blocks, Cpu, Plug, Radio } from 'lucide-react';
 
 export const wisblockModules: WisBlockModule[] = [
   // Base Boards
@@ -8,6 +9,8 @@ export const wisblockModules: WisBlockModule[] = [
     type: 'base',
     description: 'WisBlock Mini Base Board',
     slots: ['Core', 'A', 'B', 'C'],
+    icon: Blocks,
+    color: 'text-cyan-500',
   },
   {
     id: 'base-rak19003',
@@ -15,6 +18,8 @@ export const wisblockModules: WisBlockModule[] = [
     type: 'base',
     description: 'WisBlock Mini Base Board (Tiny)',
     slots: ['Core', 'A', 'B'],
+    icon: Blocks,
+    color: 'text-cyan-500',
   },
 
   // Cores
@@ -24,6 +29,8 @@ export const wisblockModules: WisBlockModule[] = [
     type: 'core',
     description: 'WisBlock Core (LoRaWAN, BLE)',
     slots: ['Core'],
+    icon: Cpu,
+    color: 'text-yellow-500',
   },
   {
     id: 'core-rak3112',
@@ -31,6 +38,8 @@ export const wisblockModules: WisBlockModule[] = [
     type: 'core',
     description: 'WisBlock Core (LoRaWAN, Wi-Fi, BLE)',
     slots: ['Core'],
+    icon: Cpu,
+    color: 'text-yellow-500',
   },
   {
     id: 'core-rak3172',
@@ -38,6 +47,8 @@ export const wisblockModules: WisBlockModule[] = [
     type: 'core',
     description: 'WisBlock Core (STM32WLE5, LoRaWAN)',
     slots: ['Core'],
+    icon: Cpu,
+    color: 'text-yellow-500',
   },
 
   // Sensors
@@ -47,6 +58,8 @@ export const wisblockModules: WisBlockModule[] = [
     type: 'sensor',
     description: 'Temperature & Humidity Sensor',
     slots: ['A', 'B'],
+    icon: Radio,
+    color: 'text-blue-600',
   },
   {
     id: 'sensor-rak1904',
@@ -54,6 +67,8 @@ export const wisblockModules: WisBlockModule[] = [
     type: 'sensor',
     description: '3-Axis Acceleration Sensor',
     slots: ['A', 'B'],
+    icon: Radio,
+    color: 'text-blue-600',
   },
 
   // IO Modules
@@ -63,5 +78,7 @@ export const wisblockModules: WisBlockModule[] = [
     type: 'io',
     description: 'Relay Module 250VAC 5A/10A',
     slots: ['IO'],
+    icon: Plug,
+    color: 'text-green-600',
   },
 ];

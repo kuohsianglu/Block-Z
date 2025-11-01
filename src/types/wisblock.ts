@@ -1,3 +1,5 @@
+import type { ElementType } from 'react';
+
 /**
  * Defines the structure for a WisBlock module.
  */
@@ -7,6 +9,8 @@ export type WisBlockModule = {
   type: 'base' | 'core' | 'sensor' | 'io';
   description: string;
   slots: string[];
+  icon?: ElementType;
+  color?: string;
 };
 
 /**
