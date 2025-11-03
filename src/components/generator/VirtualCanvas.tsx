@@ -3,6 +3,7 @@
 import type { WisBlockModule, WisBlockSlot } from '@/types/wisblock';
 import { useDroppable } from '@dnd-kit/core';
 import { LayoutGrid, XCircle } from 'lucide-react';
+import Image from 'next/image';
 import { useGenerator } from '@/contexts/GeneratorContext';
 
 export default function VirtualCanvas() {
@@ -90,23 +91,51 @@ function DroppableSlot({
   if (module) {
     return (
       <div className="relative flex min-h-[130px] flex-col justify-center rounded-md border border-primary bg-primary/20 p-2 shadow-inner">
-        <span className="text-xs font-bold uppercase text-primary/80">
-          {slotId}
-        </span>
-        <span className="font-semibold">{module.name}</span>
-        <span className="text-xs text-muted-foreground">
-          {module.description}
-        </span>
-        {onRemove && (
-          <button
-            type="button"
-            onClick={onRemove}
-            className="absolute -right-1 -top-1 rounded-full bg-background text-muted-foreground transition-colors hover:text-destructive"
-            title="Remove module"
-          >
-            <XCircle className="h-4 w-4" />
-          </button>
-        )}
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-bold uppercase text-primary/80">
+            {slotId}
+          </span>
+          {onRemove && (
+            <button
+              type="button"
+              onClick={onRemove}
+              className="absolute -right-1 -top-1 z-10 rounded-full bg-background text-muted-foreground transition-colors hover:text-destructive"
+              title="Remove module"
+            >
+              <XCircle className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+
+        <div className="mt-1 flex flex-1 items-center justify-between gap-3">
+          <div className="flex-1 overflow-hidden pr-1">
+            <span
+              className="block truncate font-semibold"
+              title={module.name}
+            >
+              {module.name}
+            </span>
+            <span
+              className="mt-1 block text-xs text-muted-foreground"
+              title={module.description}
+            >
+              {module.description}
+            </span>
+          </div>
+
+          {module.imageUrl && (
+            <div className="relative h-20 w-20 flex-shrink-0">
+              <Image
+                src={module.imageUrl}
+                alt={module.name}
+                fill
+                sizes="100px"
+                style={{ objectFit: 'contain' }}
+                className="rounded-sm p-1"
+              />
+            </div>
+          )}
+        </div>
       </div>
     );
   }

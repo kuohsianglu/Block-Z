@@ -12,15 +12,6 @@ export const wisblockModules: WisBlockModule[] = [
     icon: Blocks,
     color: 'text-cyan-500',
   },
-  {
-    id: 'base-rak19003',
-    name: 'RAK19003',
-    type: 'base',
-    description: 'WisBlock Mini Base Board (Tiny)',
-    slots: ['Core', 'A', 'B'],
-    icon: Blocks,
-    color: 'text-cyan-500',
-  },
 
   // Cores
   {
@@ -31,6 +22,7 @@ export const wisblockModules: WisBlockModule[] = [
     slots: ['Core'],
     icon: Cpu,
     color: 'text-yellow-500',
+    imageUrl: 'https://store.rakwireless.com/cdn/shop/products/RAK4631_4000x.progressive.png',
   },
   {
     id: 'core-rak3112',
@@ -40,6 +32,7 @@ export const wisblockModules: WisBlockModule[] = [
     slots: ['Core'],
     icon: Cpu,
     color: 'text-yellow-500',
+    imageUrl: 'https://store.rakwireless.com/cdn/shop/files/rak3312-wisblock-core-module_4000x.progressive.webp',
   },
   {
     id: 'core-rak3172',
@@ -49,6 +42,7 @@ export const wisblockModules: WisBlockModule[] = [
     slots: ['Core'],
     icon: Cpu,
     color: 'text-yellow-500',
+    imageUrl: 'https://store.rakwireless.com/cdn/shop/products/RAK3372_4000x.progressive.png',
   },
 
   // Sensors
@@ -60,6 +54,7 @@ export const wisblockModules: WisBlockModule[] = [
     slots: ['A', 'B'],
     icon: Radio,
     color: 'text-blue-600',
+    imageUrl: 'https://store.rakwireless.com/cdn/shop/products/RAK1901Isometric_dcc40309-52c0-4fa1-be5e-7e6d85e3e679_4000x.progressive.png',
   },
   {
     id: 'sensor-rak1904',
@@ -69,6 +64,7 @@ export const wisblockModules: WisBlockModule[] = [
     slots: ['A', 'B'],
     icon: Radio,
     color: 'text-blue-600',
+    imageUrl: 'https://store.rakwireless.com/cdn/shop/products/RAK1904Isometric_9845d016-434d-4849-bc80-05b406f2ee43_4000x.progressive.png',
   },
 
   // IO Modules
@@ -80,5 +76,6 @@ export const wisblockModules: WisBlockModule[] = [
     slots: ['IO'],
     icon: Plug,
     color: 'text-green-600',
+    imageUrl: 'https://store.rakwireless.com/cdn/shop/products/RAK13007_9bdc65e4-d455-4c85-bc7b-4d754591bf59_4000x.progressive.png',
   },
 ];

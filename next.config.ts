@@ -18,6 +18,16 @@ const baseConfig: NextConfig = {
   experimental: {
     turbopackFileSystemCacheForDev: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'store.rakwireless.com',
+        port: '',
+        pathname: '/cdn/shop/**',
+      },
+    ],
+  },
 };
 
 // Initialize the Next-Intl plugin

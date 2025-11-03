@@ -11,6 +11,7 @@ export type WisBlockModule = {
   slots: string[];
   icon?: ElementType;
   color?: string;
+  imageUrl?: string;
 };
 
 /**
