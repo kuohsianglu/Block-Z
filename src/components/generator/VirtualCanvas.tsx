@@ -124,15 +124,36 @@ function DroppableSlot({
           </div>
 
           {module.imageUrl && (
-            <div className="relative h-20 w-20 flex-shrink-0">
-              <Image
-                src={module.imageUrl}
-                alt={module.name}
-                fill
-                sizes="100px"
-                style={{ objectFit: 'contain' }}
-                className="rounded-sm p-1"
-              />
+            <div className="relative h-20 w-20 flex-shrink-0 transition-transform duration-200 ease-in-out hover:scale-200">
+              {module.productUrl
+                ? (
+                    <a
+                      href={module.productUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={`View product page for ${module.name}`}
+                      className="block h-full w-full"
+                    >
+                      <Image
+                        src={module.imageUrl}
+                        alt={module.name}
+                        fill
+                        sizes="100px"
+                        style={{ objectFit: 'contain' }}
+                        className="rounded-sm p-1"
+                      />
+                    </a>
+                  )
+                : (
+                    <Image
+                      src={module.imageUrl}
+                      alt={module.name}
+                      fill
+                      sizes="100px"
+                      style={{ objectFit: 'contain' }}
+                      className="rounded-sm p-1"
+                    />
+                  )}
             </div>
           )}
         </div>

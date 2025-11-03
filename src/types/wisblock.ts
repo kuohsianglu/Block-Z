@@ -12,6 +12,7 @@ export type WisBlockModule = {
   icon?: ElementType;
   color?: string;
   imageUrl?: string;
+  productUrl?: string;
 };
 
 /**

@@ -23,6 +23,7 @@ export const wisblockModules: WisBlockModule[] = [
     icon: Cpu,
     color: 'text-yellow-500',
     imageUrl: 'https://store.rakwireless.com/cdn/shop/products/RAK4631_4000x.progressive.png',
+    productUrl: 'https://store.rakwireless.com/products/rak4631-lpwan-node',
   },
   {
     id: 'core-rak3112',
@@ -33,6 +34,7 @@ export const wisblockModules: WisBlockModule[] = [
     icon: Cpu,
     color: 'text-yellow-500',
     imageUrl: 'https://store.rakwireless.com/cdn/shop/files/rak3312-wisblock-core-module_4000x.progressive.webp',
+    productUrl: 'https://store.rakwireless.com/products/wisblock-core-module-rak3312-lora-wifi-ble',
   },
   {
     id: 'core-rak3172',
@@ -43,6 +45,7 @@ export const wisblockModules: WisBlockModule[] = [
     icon: Cpu,
     color: 'text-yellow-500',
     imageUrl: 'https://store.rakwireless.com/cdn/shop/products/RAK3372_4000x.progressive.png',
+    productUrl: 'https://store.rakwireless.com/products/wisblock-core-module-rak3372',
   },
 
   // Sensors
@@ -55,6 +58,7 @@ export const wisblockModules: WisBlockModule[] = [
     icon: Radio,
     color: 'text-blue-600',
     imageUrl: 'https://store.rakwireless.com/cdn/shop/products/RAK1901Isometric_dcc40309-52c0-4fa1-be5e-7e6d85e3e679_4000x.progressive.png',
+    productUrl: 'https://store.rakwireless.com/products/rak1901-shtc3-temperature-humidity-sensor',
   },
   {
     id: 'sensor-rak1904',
@@ -65,6 +69,7 @@ export const wisblockModules: WisBlockModule[] = [
     icon: Radio,
     color: 'text-blue-600',
     imageUrl: 'https://store.rakwireless.com/cdn/shop/products/RAK1904Isometric_9845d016-434d-4849-bc80-05b406f2ee43_4000x.progressive.png',
+    productUrl: 'https://store.rakwireless.com/products/rak1904-lis3dh-3-axis-acceleration-sensor',
   },
 
   // IO Modules
@@ -77,5 +82,6 @@ export const wisblockModules: WisBlockModule[] = [
     icon: Plug,
     color: 'text-green-600',
     imageUrl: 'https://store.rakwireless.com/cdn/shop/products/RAK13007_9bdc65e4-d455-4c85-bc7b-4d754591bf59_4000x.progressive.png',
+    productUrl: 'https://store.rakwireless.com/products/rak13007-wisblock-relay',
   },
 ];
