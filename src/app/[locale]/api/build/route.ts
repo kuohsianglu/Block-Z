@@ -14,6 +14,11 @@ function createBuildCommand(config: HardwareConfiguration): { board: string; arg
     args.push(`-DCONFIG_WISBLOCK_SENSOR_${sensorId}=y`);
   }
 
+  if (config.slots.B) {
+    const sensorId = config.slots.B.id.replace('sensor-', '').toUpperCase();
+    args.push(`-DCONFIG_WISBLOCK_SENSOR_${sensorId}=y`);
+  }
+
   if (config.slots.IO) {
     const ioId = config.slots.IO.id.replace('io-', '').toUpperCase();
     args.push(`-DCONFIG_WISBLOCK_IO_${ioId}=y`);
