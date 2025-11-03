@@ -29,7 +29,7 @@ export default function ModuleLibrary() {
         <Input placeholder="Search modules..." className="mt-2" />
       </div>
       <ScrollArea className="flex-1 px-4">
-        <div className="flex flex-col gap-4 pb-4">
+        <div className="h-125 flex flex-col gap-4 pb-4">
           {Object.entries(moduleCategories).map(([category, modules]) => (
             <div key={category}>
               <h3 className="mb-2 text-sm font-medium text-muted-foreground">

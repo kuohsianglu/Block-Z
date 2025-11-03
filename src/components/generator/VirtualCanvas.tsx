@@ -89,7 +89,7 @@ function DroppableSlot({
 
   if (module) {
     return (
-      <div className="relative flex min-h-[120px] flex-col justify-center rounded-md border border-primary bg-primary/20 p-2 shadow-inner">
+      <div className="relative flex min-h-[130px] flex-col justify-center rounded-md border border-primary bg-primary/20 p-2 shadow-inner">
         <span className="text-xs font-bold uppercase text-primary/80">
           {slotId}
         </span>
@@ -114,7 +114,7 @@ function DroppableSlot({
   return (
     <div
       ref={setNodeRef}
-      className={`flex min-h-[120px] flex-col items-center justify-center rounded-md border-2 border-dashed
+      className={`flex min-h-[130px] flex-col items-center justify-center rounded-md border-2 border-dashed
       ${isActive ? 'border-primary bg-primary/10' : 'border-muted-foreground/30 bg-muted/20'}
       transition-colors`}
     >
