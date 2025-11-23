@@ -2,7 +2,12 @@
 
 import type { DragEndEvent } from '@dnd-kit/core';
 import type { WisBlockSlot } from '@/types/wisblock';
-import { DndContext } from '@dnd-kit/core';
+import {
+  DndContext,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
 import dynamic from 'next/dynamic';
 import BuildConsole from '@/components/generator/BuildConsole';
 import ModuleLibrary from '@/components/generator/ModuleLibrary';
@@ -12,6 +17,14 @@ import { GeneratorProvider, useGenerator } from '@/contexts/GeneratorContext';
 
 function GeneratorLayout() {
   const { addModule, config } = useGenerator();
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8, // 8px movement required to start dragging. <8px = Click.
+      },
+    }),
+  );
 
   function handleDragEnd(event: DragEndEvent) {
     const { over, active } = event;
@@ -36,7 +49,7 @@ function GeneratorLayout() {
   }
 
   return (
-    <DndContext onDragEnd={handleDragEnd}>
+    <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
       <div className="relative flex h-full w-full flex-col gap-4 overflow-hidden p-4">
         {/* (A) Module Library (Left) */}
         <div className="relative flex flex-1 gap-4 overflow-hidden">

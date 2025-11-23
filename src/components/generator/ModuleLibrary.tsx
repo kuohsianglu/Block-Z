@@ -98,18 +98,30 @@ function DraggableModule({ module }: { module: WisBlockModule }) {
     if (module.type === 'base') {
       addModule(module, 'Core');
     } else if (module.type === 'core') {
-      if (!config.core) {
-        addModule(module, 'Core');
-      }
+      addModule(module, 'Core');
     } else {
-      const firstEmptySlot = Object.keys(config.slots).find(
-        slotKey => config.slots[slotKey as keyof typeof config.slots] === null,
-      );
-      if (firstEmptySlot) {
-        addModule(module, firstEmptySlot as WisBlockSlot);
+      const compatibleSlot = module.slots.find((slotName) => {
+        return (
+          Object.hasOwn(config.slots, slotName)
+          && config.slots[slotName as WisBlockSlot] === null
+        );
+      });
+
+      if (compatibleSlot) {
+        addModule(module, compatibleSlot as WisBlockSlot);
       } else {
         console.warn('No compatible empty slot available for this module.');
       }
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter') {
+      handleClick();
+      e.preventDefault();
+    }
+    if (listeners?.onKeyDown) {
+      listeners.onKeyDown(e);
     }
   };
 
@@ -120,16 +132,24 @@ function DraggableModule({ module }: { module: WisBlockModule }) {
     <div
       ref={setNodeRef}
       style={style}
-      {...listeners}
       {...attributes}
-      className="group relative rounded-md border bg-background p-2 transition-all hover:shadow-md"
+      {...listeners}
+      role="button"
+      tabIndex={0}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      className="group relative rounded-md border bg-background p-2 transition-all hover:shadow-md cursor-pointer"
       title={`Click to add, or drag to canvas\n${module.description}`}
     >
       <button
         type="button"
-        onClick={handleClick}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleClick();
+        }}
         onMouseDown={e => e.stopPropagation()}
         onTouchStart={e => e.stopPropagation()}
+        onPointerDown={e => e.stopPropagation()}
         className="absolute -right-1 -top-1 z-10 hidden rounded-full bg-primary text-primary-foreground opacity-80 transition-all hover:opacity-100 group-hover:block"
         title="Click to add to first available slot"
       >
