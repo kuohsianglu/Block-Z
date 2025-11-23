@@ -2,12 +2,62 @@
 
 import { Loader2 } from 'lucide-react';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useGenerator } from '@/contexts/GeneratorContext';
 
 export default function SummaryPanel() {
   const { config, buildStatus, startBuild } = useGenerator();
+  const [zephyrVersion, setZephyrVersion] = useState<string | null>(null);
   const hasCore = config.core;
+
+  const fetchVersionFromApi = async () => {
+    try {
+      const res = await fetch('/api/zephyr-version');
+      if (res.ok) {
+        const data = await res.json();
+        return data.version;
+      }
+    } catch (error) {
+      console.error('Failed to fetch Zephyr version', error);
+    }
+    return null;
+  };
+
+  useEffect(() => {
+    let ignore = false;
+
+    const initFetch = async () => {
+      const version = await fetchVersionFromApi();
+      if (!ignore && version) {
+        setZephyrVersion(version);
+      }
+    };
+
+    initFetch();
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let ignore = false;
+
+    if (buildStatus === 'success') {
+      const reFetch = async () => {
+        const version = await fetchVersionFromApi();
+        if (!ignore && version) {
+          setZephyrVersion(version);
+        }
+      };
+      reFetch();
+    }
+
+    return () => {
+      ignore = true;
+    };
+  }, [buildStatus]);
 
   return (
     <div className="flex h-full flex-col rounded-lg border bg-card text-card-foreground shadow-sm">
@@ -48,15 +98,17 @@ export default function SummaryPanel() {
         </div>
       </div>
 
-      <div className="flex-1 space-y-4 overflow-y-auto p-4">
-        <h3 className="font-semibold">Zephyr</h3>
-        <div className="space-y-1 text-base">
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Kernel Version:</span>
-            <span className="font-medium">4.2</span>
+      {zephyrVersion && (
+        <div className="flex-1 space-y-4 overflow-y-auto p-4">
+          <h3 className="font-semibold">Zephyr</h3>
+          <div className="space-y-1 text-base">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Kernel Version:</span>
+              <span className="font-medium">{zephyrVersion}</span>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       <div className="border-t p-4">
         <Button
