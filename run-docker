@@ -1,0 +1,3 @@
+#!/bin/sh
+
+DOCKER_BUILD_HOST_PATH=$(pwd)/build_wisblock_zephyr docker compose up --build
