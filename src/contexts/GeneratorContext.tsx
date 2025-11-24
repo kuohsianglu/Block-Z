@@ -14,17 +14,20 @@ import React, {
   useMemo,
   useState,
 } from 'react';
+import { LORAWAN_REGIONS } from '@/data/regions';
 import { wisblockModules } from '@/data/wisblockModules';
 
 const getTimestamp = () => new Date().toLocaleTimeString();
 
 type GeneratorContextType = {
   config: HardwareConfiguration;
+  selectedRegion: string;
   buildStatus: BuildStatus;
   logs: LogEntry[];
   isConsoleExpanded: boolean;
   addModule: (module: WisBlockModule, slot: WisBlockSlot) => void;
   removeModule: (slot: WisBlockSlot) => void;
+  setSelectedRegion: (region: string) => void;
   startBuild: () => void;
   clearLogs: () => void;
   toggleConsole: (forceState?: boolean) => void;
@@ -36,14 +39,20 @@ const GeneratorContext = createContext<GeneratorContextType | undefined>(
 
 export function GeneratorProvider({ children }: { children: React.ReactNode }) {
   const [config, setConfig] = useState<HardwareConfiguration>({
-    base: wisblockModules.find(m => m.id === 'base-rak19007') || null, // Default base
-    core: wisblockModules.find(m => m.id === 'core-rak4631') || null, // Default core
+    base: wisblockModules.find(m => m.id === 'base-rak19007') || null,
+    core: wisblockModules.find(m => m.id === 'core-rak4631') || null,
     slots: {
-      A: wisblockModules.find(m => m.id === 'sensor-rak1901') || null, // Default sensor
+      A: wisblockModules.find(m => m.id === 'sensor-rak1901') || null,
       B: null,
       IO: null,
     },
   });
+
+  const [selectedRegion, setSelectedRegion] = useState<string>(
+    LORAWAN_REGIONS.find(r => r.value === 'WISBLOCK_REGION_AS923')?.value
+    || LORAWAN_REGIONS[0]?.value || '',
+  );
+
   const [buildStatus, setBuildStatus] = useState<BuildStatus>('ready');
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [isConsoleExpanded, setIsConsoleExpanded] = useState(true);
@@ -161,10 +170,15 @@ export function GeneratorProvider({ children }: { children: React.ReactNode }) {
     };
 
     try {
+      const buildArgs = `-DCONFIG_${selectedRegion}=y`;
+
       const response = await fetch('/api/build', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(config),
+        body: JSON.stringify({
+          config,
+          buildArgs,
+        }),
       });
 
       if (!response.ok || !response.body) {
@@ -212,22 +226,25 @@ export function GeneratorProvider({ children }: { children: React.ReactNode }) {
       addLog(`Frontend Error: ${errorMessage}`, 'error');
       setBuildStatus('failed');
     }
-  }, [config]);
+  }, [config, selectedRegion]);
 
   const value = useMemo(
     () => ({
       config,
+      selectedRegion,
       buildStatus,
       logs,
       isConsoleExpanded,
       addModule,
       removeModule,
+      setSelectedRegion,
       startBuild,
       clearLogs,
       toggleConsole,
     }),
     [
       config,
+      selectedRegion,
       buildStatus,
       logs,
       isConsoleExpanded,

@@ -32,10 +32,11 @@ function createBuildCommand(config: HardwareConfiguration): { board: string; arg
 
 export async function POST(req: NextRequest) {
   try {
-    // 1. Get hardware configuration from frontend
-    const config = (await req.json()) as HardwareConfiguration;
+    const body = await req.json();
 
-    // 2. Create local build directory on the server
+    const config = (body.config || body) as HardwareConfiguration;
+    const additionalBuildArgs = body.buildArgs || '';
+
     const buildDir = 'build_wisblock_zephyr';
     const absoluteBuildDir = path.resolve(process.cwd(), buildDir);
     mkdirSync(absoluteBuildDir, { recursive: true });
@@ -43,8 +44,12 @@ export async function POST(req: NextRequest) {
 
     const hostBuildPath = process.env.DOCKER_BUILD_HOST_PATH || absoluteBuildDir;
 
-    // 3. Dynamically generate build command based on config
     const { board, args } = createBuildCommand(config);
+
+    if (additionalBuildArgs) {
+      args.push(additionalBuildArgs);
+    }
+
     const buildArgsString = args.join(' ');
 
     const dockerCommand = 'docker';
@@ -52,7 +57,6 @@ export async function POST(req: NextRequest) {
       'run',
       '--rm',
       '-v',
-      // `${absoluteBuildDir}:/workdir`, // Mount absolute path
       `${hostBuildPath}:/workdir`,
       'ghcr.io/zephyrproject-rtos/zephyr-build:main',
       '/bin/bash',
@@ -86,27 +90,22 @@ export async function POST(req: NextRequest) {
       `,
     ];
 
-    // 4. Create a Stream to send logs back to frontend in real-time
     const stream = new ReadableStream({
       start(controller) {
         const send = (data: string) => {
           controller.enqueue(new TextEncoder().encode(data));
         };
 
-        // Execute Docker command
         const process = spawn(dockerCommand, dockerArgs);
 
-        // Stream stdout
         process.stdout.on('data', (data) => {
           send(data.toString());
         });
 
-        // Stream stderr
         process.stderr.on('data', (data) => {
           send(data.toString());
         });
 
-        // Handle process close
         process.on('close', (code) => {
           if (code === 0) {
             send('\n--- BUILD SUCCESSFUL ---');
@@ -117,7 +116,6 @@ export async function POST(req: NextRequest) {
           }
         });
 
-        // Handle execution errors (e.g., 'docker' command not found)
         process.on('error', (err) => {
           send(`\n--- SPAWN ERROR: ${err.message} ---`);
           controller.error(err);
@@ -125,7 +123,6 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // 5. Return the stream as response
     return new Response(stream, {
       headers: { 'Content-Type': 'text/plain; charset=utf-8' },
     });
