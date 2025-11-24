@@ -9,9 +9,8 @@ Setting up a Zephyr development environment usually involves complex toolchain i
 > **Simplify your IoT workflow:** From visual assembly to firmware binary, without writing a single line of boilerplate code or fighting with environment variables.
 
 ## See It in Action
+[blockz_demo.webm](https://github.com/user-attachments/assets/515e36ff-559d-4536-9697-1aa851013d91)
 
-<video src="assets/blockz_demo.webm" controls="controls" muted="muted" style="max-width: 100%;">
-</video>
 
 ## Features
 
