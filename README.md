@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/blockz.png" alt="Block-Z Banner" width="150">
+  <img src="public/blockz.png" alt="Block-Z Banner" width="200">
 </p>
 
 **Block-Z** is a **No-Code Zephyr Firmware Builder** and visual configuration tool specifically designed for **RAKwireless WisBlock** IoT hardware.
@@ -10,7 +10,6 @@ Setting up a Zephyr development environment usually involves complex toolchain i
 
 ## See It in Action
 [blockz_demo.webm](https://github.com/user-attachments/assets/515e36ff-559d-4536-9697-1aa851013d91)
-
 
 ## Features
 
